@@ -1,5 +1,7 @@
 package com.example.lemonade
 
+import android.R.attr.text
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,14 +22,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun TreeScreen(
-    modifier: Modifier,
-    navigateToLemon : () -> Unit // de type Unit psq ca rnevoie rien ca te fait just epasser udne page a lautre
+fun LemonScreen(
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit
 ) {
+    val images = listOf(R.drawable.lemon_squeeze, R.drawable.lemon_drink)
+    val textes : List<String> = listOf("test", "deucie", "troisieme")
+
+
+    var indexPrParcourirLeTableau by remember { mutableStateOf(0) } // on commence a 0 psq c lindex de limage dans le tableau et a chaque fois ca va recomposer la page avce limage dmd
+
     Column(
         modifier = modifier.fillMaxSize(), // faut mettre le fill max size pr que ca se centre au milieu de la page
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
 
         var result by remember { mutableStateOf(1) }
@@ -36,29 +44,39 @@ fun TreeScreen(
         var click = 0
 
         Button(
-            modifier = Modifier.background(Color.Red),
+            modifier = Modifier.background(Color.Blue),
             onClick = {
-                if (click < result) {
-                    click++
-                } else {
-                    navigateToLemon()
+                click++
+                Log.d("sam", "Nombre de click : $click, random : $result")
+                if (click >= result){
+                    click = 0
+                    result = (2..4).random()
+                    indexPrParcourirLeTableau++
                 }
             },
         ) {
             Image( // cv dans le content du btn
-                painter = painterResource(R.drawable.lemon_tree),
+                painter = painterResource(images[indexPrParcourirLeTableau % images.size]), // pr quon soit tjrs dans la taille du tableau -1 (psq le 1er index est egal a 0)
                 contentDescription = null
             )
         }
 
         val title = "Tap the lemon tree to select a lemon" // la on lui assigne sa valeur
-        Text( // la on affiche la valeur de title
-            text = title,
+        Text(
+            text = textes[indexPrParcourirLeTableau%textes.size],
             modifier = Modifier,
             textAlign = TextAlign.Center
-        )
+        ) // la on affiche la valeur de title
 
         // Log.d("test", "TreeScreen: $name")
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun Preview() {
+    TreeScreen(
+        modifier = Modifier,
+        navigateToLemon = {}
+    )
+}

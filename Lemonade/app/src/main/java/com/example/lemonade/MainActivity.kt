@@ -12,6 +12,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.lemonade.ui.theme.LemonadeTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,32 +22,31 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            LemonadeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val modifierWithPaddings = Modifier.padding(innerPadding)
-                    Log.d("test", "onCreate: modifierWithPaddings = $modifierWithPaddings")
-                    Log.d("test", "onCreate: Modifier = $Modifier")
-                    TreeScreen(
-                        modifier = modifierWithPaddings
-                    )
+            Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                val modifierWithPaddings = Modifier.padding(innerPadding)
+                Log.d("test", "onCreate: modifierWithPaddings = $modifierWithPaddings")
+                Log.d("test", "onCreate: Modifier = $Modifier")
+
+                val navController = rememberNavController()
+
+                NavHost(
+                    navController = navController,
+                    startDestination = "treeScreen"
+                ) {
+                    composable("treeScreen") {
+                        // On passe un callback pour naviguer
+                        TreeScreen(
+                            modifier = Modifier.fillMaxSize(),
+                            navigateToLemon = { navController.navigate("lemonScreen") }
+                        )
+                    }
+                    composable("lemonScreen") {
+                        LemonScreen(
+                            onBackClick = { navController.popBackStack() },
+                        )
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    LemonadeTheme {
-        Greeting("Android")
     }
 }
