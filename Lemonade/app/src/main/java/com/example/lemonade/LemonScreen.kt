@@ -1,6 +1,5 @@
 package com.example.lemonade
 
-import android.R.attr.text
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,9 +25,8 @@ fun LemonScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit
 ) {
-    val images = listOf(R.drawable.lemon_squeeze, R.drawable.lemon_drink)
-    val textes : List<String> = listOf("test", "deucie", "troisieme")
-
+    val images = listOf(R.drawable.lemon_squeeze, R.drawable.lemon_drink, R.drawable.lemon_restart)
+    val textes: List<String> = listOf("test", "deucie", "troisieme")
 
     var indexPrParcourirLeTableau by remember { mutableStateOf(0) } // on commence a 0 psq c lindex de limage dans le tableau et a chaque fois ca va recomposer la page avce limage dmd
 
@@ -38,35 +36,43 @@ fun LemonScreen(
         verticalArrangement = Arrangement.Center,
     ) {
 
-        var result by remember { mutableStateOf(1) }
-        result = (2..4).random()
-
-        var click = 0
+        var click by remember { mutableStateOf(0) } // commence par 0 vu que c un index dans le tableau
+        var result by remember { mutableStateOf((2..4).random()) } // on cree direct une valeur random et on la met en rembember
 
         Button(
             modifier = Modifier.background(Color.Blue),
             onClick = {
                 click++
-                Log.d("sam", "Nombre de click : $click, random : $result")
-                if (click >= result){
+                Log.d(
+                    "sam",
+                    "Nombre de click : $click, random : $result, $indexPrParcourirLeTableau"
+                )
+
+                if (click >= result) {
                     click = 0
                     result = (2..4).random()
                     indexPrParcourirLeTableau++
                 }
+                if (indexPrParcourirLeTableau >=  images.size) {
+                    onBackClick()  // si indexPrParcourirLeTableau est plus grand que 3 ca revient sur la page
+                    return@Button // stop le programme ici pr pas afficher lecran avec un index + grand que 3 (pr image et texte) dcp sans image ecran blanc, dcp pas bs de re verifier lindex
+                }
+
             },
         ) {
-            Image( // cv dans le content du btn
-                painter = painterResource(images[indexPrParcourirLeTableau % images.size]), // pr quon soit tjrs dans la taille du tableau -1 (psq le 1er index est egal a 0)
+
+            Image(  // cv dans le content du btn
+                painter = painterResource(images[indexPrParcourirLeTableau.takeIf { it < 3 } ?: 2]),
                 contentDescription = null
             )
         }
 
-        val title = "Tap the lemon tree to select a lemon" // la on lui assigne sa valeur
+
         Text(
-            text = textes[indexPrParcourirLeTableau%textes.size],
+            text = textes[indexPrParcourirLeTableau.takeIf { it < 3 } ?: (images.size - 1)], // on fait le if sur indexPrParcourirLeTableau, -1 car le premier index est egal a 0, dcp si c plus petit que 3 on prend le chiffre que cest de base et si c plus grand que 3 on prend limage size - 1 ducoup si on arrive a la 4eme image cv nous mettre sur la 3eme mais on sen fiche vu quon change de page apres cv remettre limage avec lindex 0
             modifier = Modifier,
             textAlign = TextAlign.Center
-        ) // la on affiche la valeur de title
+        )
 
         // Log.d("test", "TreeScreen: $name")
     }
@@ -75,8 +81,8 @@ fun LemonScreen(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    TreeScreen(
+    LemonScreen(
         modifier = Modifier,
-        navigateToLemon = {}
+        onBackClick = {}
     )
 }
