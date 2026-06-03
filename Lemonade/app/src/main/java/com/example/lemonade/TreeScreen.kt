@@ -1,12 +1,16 @@
 package com.example.lemonade
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,6 +23,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun TreeScreen(
@@ -34,8 +40,15 @@ fun TreeScreen(
         var result by remember { mutableStateOf((2..4).random()) }
         var click by remember { mutableStateOf(0) }
 
+        //        class Test (){}
+        //
+        //        val test = Test() instance de la classe Test
+
         Button(
-            modifier = Modifier.background(Color.Red),
+            modifier = Modifier,
+            colors = ButtonDefaults.buttonColors(Color(0xFF86DEB4)),
+            border = BorderStroke(20.dp, Color(0xFF86DEB4)),
+            shape = RoundedCornerShape(42.dp),
             onClick = {
                 Log.d("sam", "TreeScreen: $click, $result")
                 if (click < result) {
@@ -54,11 +67,14 @@ fun TreeScreen(
             )
         }
 
+        Spacer(modifier = Modifier.height(16.dp))
+
         val title = "Tap the lemon tree to select a lemon" // la on lui assigne sa valeur
         Text( // la on affiche la valeur de title
             text = title,
             modifier = Modifier,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            fontSize = 18.sp
         )
 
         // Log.d("test", "TreeScreen: $name")
