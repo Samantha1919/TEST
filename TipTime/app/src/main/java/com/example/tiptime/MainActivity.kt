@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -56,7 +57,11 @@ fun PlanTexte(modifier: Modifier) {
 
     val montant = montantPourboire.toDoubleOrNull()
         ?: 0.0 // convertir la String en Double, analyse le variable en tant que Double et retourne le resultat ou 0.0 si c pas un nombre dcp ca retourne null et on gere pr repondre 0.0 avec le elvis operator ?:
-    val pourboire = calculateTip(montant)
+    var pourboireInput by remember { mutableStateOf("") }
+
+    val pourboirePourcent = pourboireInput.toDoubleOrNull() ?: 0.0
+
+    val pourboire = calculateTip(montant, pourboirePourcent)
 
     Column(
         modifier = modifier
@@ -72,10 +77,26 @@ fun PlanTexte(modifier: Modifier) {
                 .padding(bottom = 16.dp, top = 40.dp)
                 .align(alignment = Alignment.Start)
         )
-        EditNumberField(value = montantPourboire, onValueChange = { montantPourboire = it }) // it est la nvlle valeur du texte/montantPourboire dcp cest ca qui affiche le texte noté
+        EditNumberField(
+            value = montantPourboire,
+            onValueChange = {
+                montantPourboire = it
+            }, // it est la nvlle valeur du texte/montantPourboire dcp cest ca qui affiche le texte noté
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            label = R.string.prix
+        )
+        EditNumberField(
+            value = pourboireInput,
+            onValueChange = { pourboireInput = it },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            label = R.string.pourcentage_pourboire
+        )
 
         Text(
-            text = stringResource(R.string.montant_pourboire, pourboire), // on affiche le pourboire la valeur comme ca100
+            text = stringResource(
+                R.string.montant_pourboire,
+                pourboire
+            ), // on affiche le pourboire la valeur comme ca %s
             style = MaterialTheme.typography.displaySmall
         )
 
@@ -88,26 +109,29 @@ fun PlanTexte(modifier: Modifier) {
 fun EditNumberField(
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit, // afin que letat puisse etre maj quand luser ecrit
-    value: String
+    value: String,
+    keyboardOptions: KeyboardOptions,
+    @StringRes label: Int // pk c un int ?
 ) {
 
     TextField(
-        value = value, // pas bs de .value car on a utilisé by
-        onValueChange = onValueChange,
+        value = value, // pas bs de .value car on a utilisé by, value cest le texte qui va afficher la valeur du texte quoi,
+        onValueChange = onValueChange, //  onValueChange cest le rappel lambda qui est déclenché lorsquon saisit du texte dans le TextField
         singleLine = true, // ca met tt sur une ligne meme si le texte est long
-        label = { Text("Bill amount") },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), // si le clavier souvre ouvre un clavier de num mais faut lactiver sur le tel
+        label = { Text(stringResource(label)) },
+        keyboardOptions = keyboardOptions, // si le clavier souvre ouvre un clavier de num mais faut lactiver sur le tel
         modifier = Modifier
             .padding(bottom = 32.dp)
             .fillMaxWidth()
-    ) // value cest le texte qui va afficher la valeur du texte quoi, onValueChange cest le rappel lambda qui est déclenché lorsquon saisit du texte dans le TextField
+    )
+
 }
 
 private fun calculateTip(
     montantPourboire: Double,
-    tipPercent: Double = 15.0 // pr linstant le pourboire est de 15%
+    pourboirePourcent: Double// jai enlevé la valeur pae defaut
 ): String {
-    val pourboire = tipPercent / 100 * montantPourboire
+    val pourboire = pourboirePourcent / 100 * montantPourboire
     return NumberFormat.getCurrencyInstance() // NumberFormat apllique un format monétaire
         .format(pourboire)
 }

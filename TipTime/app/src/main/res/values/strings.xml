@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">TipTime</string>
     <string name="montant_pourboire">Tip Amount %s</string>
+    <string name="pourcentage_pourboire">Tip Percentage</string>
+    <string name="prix">Bill Amount</string>
+
 </resources>
