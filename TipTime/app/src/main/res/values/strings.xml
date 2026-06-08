@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TipTime</string>
+    <string name="montant_pourboire">Tip Amount %s</string>
+</resources>
