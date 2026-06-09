@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,7 +19,10 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -31,10 +35,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.tiptime.ui.theme.TipTimeTheme
 
 class MainActivity : ComponentActivity() {
@@ -54,7 +61,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun PlanTexte(modifier: Modifier) {
+fun PlanTexte(
+    modifier: Modifier = Modifier
+) {
 
     var montantPourboire: String by remember { // pk on lui donne une valeur de string c psq on va lafficher dans une string ?, chaque fois que sa valeur change compose va faire une recomposition
         mutableStateOf("")
@@ -74,6 +83,7 @@ fun PlanTexte(modifier: Modifier) {
 
     Column(
         modifier = modifier
+            .verticalScroll(rememberScrollState())
             .statusBarsPadding()
             .padding(horizontal = 40.dp)
             .safeDrawingPadding(),
@@ -82,6 +92,8 @@ fun PlanTexte(modifier: Modifier) {
     ) {
         Text(
             text = "Calculate Tip",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .padding(bottom = 16.dp, top = 40.dp)
                 .align(alignment = Alignment.Start)
@@ -89,19 +101,22 @@ fun PlanTexte(modifier: Modifier) {
         EditNumberField(
             value = montantPourboire,
             onValueChange = {
-                montantPourboire = it
-            }, // it est la nvlle valeur du texte/montantPourboire dcp cest ca qui affiche le texte noté
+                montantPourboire =
+                    it // it est la nvlle valeur du texte/montantPourboire dcp cest ca qui affiche le texte noté
+            },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Next
             ),
+            leadingIcon = R.drawable.money,
             label = R.string.prix
         )
         EditNumberField(
             value = pourboireInput,
             onValueChange = { pourboireInput = it },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), // ou keyboardOptions = KeyboardOptions.Default.copy( keyboardType = KeyboardType.Number, imeAction = ImeAction.Done) mais les 2 ont la mm chose
-            label = R.string.pourcentage_pourboire
+            label = R.string.pourcentage_pourboire,
+            leadingIcon = R.drawable.percent
         )
 
         ArrondirPourboire(
@@ -126,6 +141,7 @@ fun PlanTexte(modifier: Modifier) {
 @Composable
 fun EditNumberField(
     modifier: Modifier = Modifier,
+    @DrawableRes leadingIcon: Int,
     onValueChange: (String) -> Unit, // afin que letat puisse etre maj quand luser ecrit
     value: String,
     keyboardOptions: KeyboardOptions,
@@ -137,6 +153,7 @@ fun EditNumberField(
         onValueChange = onValueChange, //  onValueChange cest le rappel lambda qui est déclenché lorsquon saisit du texte dans le TextField
         singleLine = true, // ca met tt sur une ligne meme si le texte est long
         label = { Text(stringResource(label)) },
+        leadingIcon = { Icon(painter = painterResource(id = leadingIcon), null) },
         keyboardOptions = keyboardOptions, // si le clavier souvre ouvre un clavier de num mais faut lactiver sur le tel
         modifier = Modifier
             .padding(bottom = 32.dp)
