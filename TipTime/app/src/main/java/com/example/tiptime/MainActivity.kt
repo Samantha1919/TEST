@@ -1,12 +1,13 @@
 package com.example.tiptime
 
-import android.icu.text.NumberFormat
+import java.text.NumberFormat
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -65,13 +66,13 @@ fun PlanTexte(
     modifier: Modifier = Modifier
 ) {
 
-    var montantPourboire: String by remember { // pk on lui donne une valeur de string c psq on va lafficher dans une string ?, chaque fois que sa valeur change compose va faire une recomposition
+    var montantFacture: String by remember { // pk on lui donne une valeur de string c psq on va lafficher dans une string ?, chaque fois que sa valeur change compose va faire une recomposition
         mutableStateOf("")
     }
 
     var pourboireInput by remember { mutableStateOf("") }
 
-    val montant = montantPourboire.toDoubleOrNull()
+    val montant = montantFacture.toDoubleOrNull()
         ?: 0.0 // convertir la String en Double, analyse le variable en tant que Double et retourne le resultat ou 0.0 si c pas un nombre dcp ca retourne null et on gere pr repondre 0.0 avec le elvis operator ?:
 
     val pourboirePourcent = pourboireInput.toDoubleOrNull() ?: 0.0
@@ -99,9 +100,9 @@ fun PlanTexte(
                 .align(alignment = Alignment.Start)
         )
         EditNumberField(
-            value = montantPourboire,
+            value = montantFacture,
             onValueChange = {
-                montantPourboire =
+                montantFacture =
                     it // it est la nvlle valeur du texte/montantPourboire dcp cest ca qui affiche le texte noté
             },
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -187,12 +188,13 @@ fun ArrondirPourboire(
     }
 }
 
-private fun calculateTip(
-    montantPourboire: Double,
-    pourboirePourcent: Double, // jai enlevé la valeur pae defaut
+@VisibleForTesting
+internal fun calculateTip(
+    montantFacture: Double,
+    pourboirePourcent: Double, // jai enlevé la valeur par defaut
     roundUp: Boolean
 ): String {
-    var pourboire = pourboirePourcent / 100 * montantPourboire
+    var pourboire = pourboirePourcent / 100 * montantFacture
     if (roundUp) {
         pourboire = kotlin.math.ceil(pourboire) // arrondit le pourboire au chiffre superieur
     }
