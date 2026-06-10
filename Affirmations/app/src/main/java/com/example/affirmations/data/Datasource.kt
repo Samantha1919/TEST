@@ -1,7 +1,6 @@
 package com.example.affirmations.data
 
 import com.example.affirmations.model.Affirmation
-import androidx.compose.ui.res.stringResource
 import com.example.affirmations.R
 
 class Datasource() {
