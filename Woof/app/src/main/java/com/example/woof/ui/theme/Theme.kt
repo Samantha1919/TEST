@@ -5,7 +5,6 @@ import android.os.Build
 import android.view.View
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -48,6 +47,7 @@ private val LightColors = lightColorScheme(
     surfaceTint = md_theme_light_surfaceTint,
     outlineVariant = md_theme_light_outlineVariant,
     scrim = md_theme_light_scrim,
+    surfaceContainerHighest = ma_couleur_light //pr les card
 )
 
 
@@ -81,6 +81,7 @@ private val DarkColors = darkColorScheme(
     surfaceTint = md_theme_dark_surfaceTint,
     outlineVariant = md_theme_dark_outlineVariant,
     scrim = md_theme_dark_scrim,
+    surfaceContainerHighest = ma_couleur_dark,
 )
 
 @Composable
@@ -106,9 +107,9 @@ fun WoofTheme(
         }
     }
 
-    MaterialTheme(
+    MaterialTheme( // la ou on definit tout les styles genre
         colorScheme = colorScheme,
-        shapes = shapes,
+        shapes = Shapes, // on la definit sur Shapes la variable dans le fichier Shape.kt
         typography = Typography,
         content = content
     )
