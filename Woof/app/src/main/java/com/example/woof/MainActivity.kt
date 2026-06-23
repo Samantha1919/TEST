@@ -5,24 +5,37 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -82,9 +95,6 @@ fun WoofTopAppBar(modifier: Modifier = Modifier) {
     )
 }
 
-/**
- * Composable that displays an app bar and a list of dogs.
- */
 @Composable
 fun WoofApp() {
     LazyColumn(
@@ -98,32 +108,98 @@ fun WoofApp() {
     }
 }
 
-/**
- * Composable that displays a list item containing a dog icon and their information.
- *
- * @param dog contains the data that populates the list item
- * @param modifier modifiers to set to this composable
- */
 @Composable
 fun DogItem(
     dog: Dog,
     modifier: Modifier = Modifier
 ) {
-    Card() {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(dimensionResource(R.dimen.padding_small)) // ca le convertit dcp c comme si ct 8.dp
-        ) {
-            DogIcon(dog.imageResourceId)
-            DogInformation(dog.name, dog.age)
-        }
+    var expanded by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = modifier
+    ) {
+        Column(
+            modifier = Modifier.animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioNoBouncy,
+                    stiffness = Spring.StiffnessMedium
+                )
+                )
+            ) {
+
+                Row(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(dimensionResource(R.dimen.padding_small)) // ca le convertit dcp c comme si ct 8.dp
+                ) {
+                    DogImage(dog.imageResourceId) // la ou on recup les noms et tt avec le .
+                    DogInformation(dog.name, dog.age)
+                    Spacer(modifier = Modifier.weight(1f)) // espace pour que la fleche soit au bon endroit icon
+                    DogArrowIcon(
+                        expandedParam = expanded,
+                        onClick = {
+                            expanded = !expanded
+                        } // expanded passe a la valeur contraire au debut il est a false apres tu appuies et dcp il est a true ect
+                    )
+                }
+
+                if (expanded) { // si expanded est a true, montre les hobbies des chiens
+                    DogHobby(dog.hobbies)
+                }
+
+            }
     }
 }
 
 @Composable
-fun DogIcon( // image chien
-    @DrawableRes dogIcon: Int,
+fun DogHobby(
+    @StringRes dogHobby: Int,
+) {
+    Column() {
+        Text(
+            text = "About:",
+            style = MaterialTheme.typography.labelSmall,
+            modifier = Modifier.padding(
+                start = dimensionResource(R.dimen.padding_medium),
+                top = dimensionResource(R.dimen.padding_small),
+                end = dimensionResource(R.dimen.padding_medium),
+
+                )
+        )
+        Text(
+            text = stringResource(dogHobby),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(
+                start = dimensionResource(R.dimen.padding_medium),
+                end = dimensionResource(R.dimen.padding_medium),
+                bottom = dimensionResource(R.dimen.padding_medium)
+            )
+        )
+
+    }
+}
+
+@Composable
+private fun DogArrowIcon( // fleche icone
+    expandedParam: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+
+    IconButton(onClick = onClick, modifier = Modifier) {
+        Icon(
+            imageVector = if (expandedParam) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore, // si c a true affiche la fleche vers le haut et si c a false affiche la fleche vers le bas
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.secondary
+        )
+
+    }
+
+}
+
+@Composable
+fun DogImage( // image chien
+    @DrawableRes dogIcon: Int, // juste un nom et apres on recup vrm
     modifier: Modifier = Modifier
 ) {
     Image(
