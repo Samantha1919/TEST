@@ -16,6 +16,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -37,7 +39,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SuperheroesTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    topBar = { HeroTopBar() },
+                    modifier = Modifier.fillMaxSize()
+                ) { innerPadding ->
                     HeroApp(
                         modifier = Modifier.padding(innerPadding)
                     )
@@ -45,6 +50,26 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HeroTopBar() {
+
+    CenterAlignedTopAppBar(
+        title = {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+
+                Text(
+                    text = "Superheroes",
+                    style = MaterialTheme.typography.displayLarge,
+                )
+
+            }
+        },
+        modifier = Modifier
+    )
+
 }
 
 @Composable
@@ -67,25 +92,25 @@ private fun HeroItem(
     ) { // espace entre les cartes
         Row(modifier = Modifier, verticalAlignment = Alignment.CenterVertically) {
 
-                HeroTextes(hero, Modifier.weight(1f))
+            HeroTextes(hero, Modifier.weight(1f))
 
-                Image(
-                    painter = painterResource(hero.imageRes), // pas centré cest quelle prend toute la place
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(120.dp)
-                        .padding(24.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-                    contentScale = ContentScale.FillWidth
-                )
+            Image(
+                painter = painterResource(hero.imageRes), // pas centré cest quelle prend toute la place
+                contentDescription = null,
+                modifier = Modifier
+                    .size(120.dp)
+                    .padding(24.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+                contentScale = ContentScale.Crop
+            )
 
-            }
+        }
     }
 }
 
 @Composable
 fun HeroTextes(hero: Hero, modifier: Modifier = Modifier) {
-    Column(modifier = modifier, ) {
+    Column(modifier = modifier) {
         Text(
             text = stringResource(hero.nameRes),
             style = MaterialTheme.typography.displayMedium,
