@@ -6,8 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,9 +23,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.superheroes.model.Hero
@@ -60,57 +58,57 @@ fun HeroApp(modifier: Modifier = Modifier) {
 
 @Composable
 private fun HeroItem(
-    hero: Hero, // contient toutes les infos des heros
-
+    hero: Hero, // contient toutes les infos des heros, hero c une instance de la classe Hero
 ) {
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
     ) { // espace entre les cartes
+        Row(modifier = Modifier, verticalAlignment = Alignment.CenterVertically) {
 
-        Column(
-            modifier = Modifier.padding(8.dp),
-           // verticalArrangement = Arrangement.Center
-        ) { // espace/padding a linterieur de la carte
+                HeroTextes(hero, Modifier.weight(1f))
 
-            Text(
-                text = stringResource(hero.nameRes),
-                style = MaterialTheme.typography.displayMedium,
-                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, end = 8.dp, start = 8.dp),
-             //   textAlign = TextAlign.Center
-
-            )
-            Text(
-                text = stringResource(hero.descriptionRes),
-                modifier = Modifier.padding(bottom = 8.dp, end = 8.dp, start = 8.dp),
-                style = MaterialTheme.typography.labelSmall,
-              //  textAlign = TextAlign.Center
-            )
-
-
-            Box(
-             //   contentAlignment = Alignment.CenterEnd,
-                modifier = Modifier.fillMaxWidth()
-            ) { // les enfants de la box qui seront stylisées
                 Image(
-                    painter = painterResource(hero.imageRes),
+                    painter = painterResource(hero.imageRes), // pas centré cest quelle prend toute la place
                     contentDescription = null,
                     modifier = Modifier
-                        .size(100.dp)
-                        .clip(RoundedCornerShape(8.dp))
-
+                        .size(120.dp)
+                        .padding(24.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.FillWidth
                 )
+
             }
-        }
+    }
+}
+
+@Composable
+fun HeroTextes(hero: Hero, modifier: Modifier = Modifier) {
+    Column(modifier = modifier, ) {
+        Text(
+            text = stringResource(hero.nameRes),
+            style = MaterialTheme.typography.displayMedium,
+            modifier = Modifier
+                .padding(
+                    top = 8.dp,
+                    bottom = 8.dp,
+                    end = 8.dp,
+                    start = 16.dp
+                ),
+        )
+        Text(
+            text = stringResource(hero.descriptionRes),
+            modifier = Modifier
+                .padding(bottom = 8.dp, end = 8.dp, start = 16.dp),
+            style = MaterialTheme.typography.labelSmall,
+        )
     }
 }
 
 @Preview
 @Composable
 private fun HeroPreview() {
-
     HeroItem(
         Hero(
             nameRes = R.string.hero2,
@@ -123,18 +121,7 @@ private fun HeroPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun Colonne() {
-    Column() {
-        Textes("bonjour", "salut")
-        Image(painter = painterResource(R.drawable.android_superhero2), contentDescription = null)
-    }
-
-}
-
-@Preview(showBackground = true)
-@Composable
 private fun Rangee() {
-
     Row() {
 
         Textes("bonjour", "salut")
@@ -146,8 +133,8 @@ private fun Rangee() {
 @Composable
 private fun Textes(motUn: String, motDeux: String) {
     Column() {
-    Text(text = motUn)
-    Text(text = motDeux)
-}
+        Text(text = motUn)
+        Text(text = motDeux)
+    }
 }
 
