@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">ThirtyDays</string>
+    <string name="day_one">Day one</string>
+    <string name="day_one_description">Meet Cookie</string>
+    <string name="day_two">Day two</string>
+    <string name="day_two_description">Go out for a walk</string>
+    <string name="day_three">Day three</string>
+    <string name="day_three_description">Have a rest</string>
+    <string name="day_four">Day four</string>
+    <string name="day_four_description">Go do some gardening</string>
+    <string name="day_five">Day five</string>
+    <string name="day_five_description">Watch a film</string>
+    <string name="day_six">Day six</string>
+    <string name="day_six_description">Watch a serie</string>
+    <string name="day_seven">Day seven</string>
+    <string name="day_seven_description">Go out with friends</string>
+    <string name="day_eight">Day eight</string>
+    <string name="day_eight_description">Work on yourself</string>
+    <string name="day_nine">Day nine</string>
+    <string name="day_nine_description">Do a cute face uwu</string>
+    <string name="day_ten">Day ten</string>
+    <string name="day_ten_description">Have a rest again (we know that you played lol all night)</string>
+</resources>
