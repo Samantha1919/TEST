@@ -40,6 +40,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,10 +57,15 @@ import com.example.dessertclicker.data.Datasource
 import com.example.dessertclicker.model.Dessert
 import com.example.dessertclicker.ui.theme.DessertClicker
 
+private const val TAG = "MainActivity"
+
+
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate Called")
         setContent {
             DessertClicker {
                 // A surface container using the 'background' color from the theme
@@ -73,6 +79,36 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart Called")
+    }
+
+    override fun onResume() { // appelé au démarrage, quand jappuie sur partager ca fait onPause puis quand je reviens sur lapp ca active onResume
+        super.onResume()
+        Log.d(TAG, "onResume Called")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Log.d(TAG, "onRestart Called")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause Called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop Called")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy Called")
+    }
 }
 
 /**
@@ -84,11 +120,12 @@ fun determineDessertToShow(
 ): Dessert { // type de a retour/retourner
     var dessertToShow =
         desserts.first() // le dessert a montrer est le premier sur la liste de desserts
-    Log.e( "avant", "dessert davant: $dessertToShow", ) // prend tjrs le premier dcp donuts
+    Log.e("avant", "dessert davant: $dessertToShow") // prend tjrs le premier dcp donuts
     for (dessert in desserts) { // pr chaque dessert dans la liste desserts
         if (dessertsSold >= dessert.startProductionAmount) { // si le dessert vendu est plus grand ou egal a la startProductionAmount du dessert, dcp si c le premier apres le startProductionAmount est + gransd c le 2eme et si c plus grand que le startProductionAmount du 2eme c le 3eme dessert ect../on écrase progressivement dessertToShow jusqu'au dernier dessert débloqué
-            dessertToShow = dessert // le dessert a afficher est le dessert dans la liste desserts qui est le plus grand et dcp c lui quon va afficher a chaque fois
-            Log.e( "transformation", "dessert transforme: $dessertToShow", )
+            dessertToShow =
+                dessert // le dessert a afficher est le dessert dans la liste desserts qui est le plus grand et dcp c lui quon va afficher a chaque fois
+            Log.e("transformation", "dessert transforme: $dessertToShow")
         } else {
             // The list of desserts is sorted by startProductionAmount. As you sell more desserts,
             // you'll start producing more expensive desserts as determined by startProductionAmount
@@ -99,7 +136,7 @@ fun determineDessertToShow(
 
     // le for parcourt tte la liste ou sarrt avec un break
 
-    Log.e( "ressort", "dessert a la fin: $dessertToShow", )
+    Log.e("ressort", "dessert a la fin: $dessertToShow")
 
     return dessertToShow // a chaque tour il affiche le dessert a montrer dcp
 }
@@ -135,15 +172,17 @@ private fun DessertClickerApp(
     desserts: List<Dessert>
 ) {
 
-    var revenue by remember { mutableStateOf(0) }
-    var dessertsSold by remember { mutableStateOf(0) }
+    // on utilise rememberSaveable pr que ca garde les valeurs quand on tourne l'écran (modifications de la configuration)
 
-    val currentDessertIndex by remember { mutableStateOf(0) }
+    var revenue by rememberSaveable { mutableStateOf(0) }
+    var dessertsSold by rememberSaveable { mutableStateOf(0) }
 
-    var currentDessertPrice by remember {
+    val currentDessertIndex by rememberSaveable { mutableStateOf(0) }
+
+    var currentDessertPrice by rememberSaveable {
         mutableStateOf(desserts[currentDessertIndex].price)
     }
-    var currentDessertImageId by remember {
+    var currentDessertImageId by rememberSaveable {
         mutableStateOf(desserts[currentDessertIndex].imageId)
     }
 
