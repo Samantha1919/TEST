@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,10 +30,10 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,10 +50,10 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import com.example.dessertclicker.data.Datasource
 import com.example.dessertclicker.model.Dessert
-import kotlin.collections.first
 import com.example.dessertclicker.ui.theme.DessertClicker
 
 class MainActivity : ComponentActivity() {
@@ -67,7 +68,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .statusBarsPadding(),
                 ) {
-                    DessertClickerApp(desserts = Datasource.dessertList)
+                    DessertClickerApp(desserts = Datasource.dessertList) // nom de lobjet
                 }
             }
         }
@@ -78,23 +79,29 @@ class MainActivity : ComponentActivity() {
  * Determine which dessert to show.
  */
 fun determineDessertToShow(
-    desserts: List<Dessert>,
-    dessertsSold: Int
-): Dessert {
-    var dessertToShow = desserts.first()
-    for (dessert in desserts) {
-        if (dessertsSold >= dessert.startProductionAmount) {
-            dessertToShow = dessert
+    desserts: List<Dessert>, // liste de desserts de type Dessert
+    dessertsSold: Int // nb de desserts vendus
+): Dessert { // type de a retour/retourner
+    var dessertToShow =
+        desserts.first() // le dessert a montrer est le premier sur la liste de desserts
+    Log.e( "avant", "dessert davant: $dessertToShow", ) // prend tjrs le premier dcp donuts
+    for (dessert in desserts) { // pr chaque dessert dans la liste desserts
+        if (dessertsSold >= dessert.startProductionAmount) { // si le dessert vendu est plus grand ou egal a la startProductionAmount du dessert, dcp si c le premier apres le startProductionAmount est + gransd c le 2eme et si c plus grand que le startProductionAmount du 2eme c le 3eme dessert ect../on écrase progressivement dessertToShow jusqu'au dernier dessert débloqué
+            dessertToShow = dessert // le dessert a afficher est le dessert dans la liste desserts qui est le plus grand et dcp c lui quon va afficher a chaque fois
+            Log.e( "transformation", "dessert transforme: $dessertToShow", )
         } else {
             // The list of desserts is sorted by startProductionAmount. As you sell more desserts,
             // you'll start producing more expensive desserts as determined by startProductionAmount
-            // We know to break as soon as we see a dessert who's "startProductionAmount" is greater
-            // than the amount sold.
+            // We know to break as soon as we see a dessert who's "startProductionAmount" is greater than the amount sold.
             break
         }
     }
 
-    return dessertToShow
+    // le for parcourt tte la liste ou sarrt avec un break
+
+    Log.e( "ressort", "dessert a la fin: $dessertToShow", )
+
+    return dessertToShow // a chaque tour il affiche le dessert a montrer dcp
 }
 
 /**
@@ -314,10 +321,10 @@ private fun DessertsSoldInfo(dessertsSold: Int, modifier: Modifier = Modifier) {
     }
 }
 
-//@Preview
-//@Composable
-//fun MyDessertClickerAppPreview() {
-//    DessertClicker {
-//        DessertClickerApp(listOf(Dessert(R.drawable.cupcake, 5, 0)))
-//    }
-//}
+@Preview
+@Composable
+fun MyDessertClickerAppPreview() {
+    DessertClicker {
+        DessertClickerApp(listOf(Dessert(R.drawable.cupcake, 5, 0)))
+    }
+}
