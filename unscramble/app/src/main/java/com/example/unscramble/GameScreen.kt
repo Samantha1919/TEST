@@ -40,8 +40,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.unscramble.R
 import com.example.unscramble.GameViewModel
+import com.example.unscramble.R
 import com.example.unscramble.ui.theme.UnscrambleTheme
 
 @Composable // on pass les infos de GameViewModel a GameScreen
@@ -72,7 +72,10 @@ fun GameScreen(
                 .wrapContentHeight()
                 .padding(mediumPadding),
             currentScrambledWord = gameUiState.currentScrambledWord,
-        )
+            userGuess = gameViewModel.userGuess,
+            onUserGuessChanged = { gameViewModel.updateUserGuess(it) },
+            onKeyboardDone = { },
+            )
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -125,6 +128,9 @@ fun GameStatus(score: Int, modifier: Modifier = Modifier) {
 fun GameLayout(
     modifier: Modifier = Modifier,
     currentScrambledWord: String,
+    userGuess: String,
+    onUserGuessChanged: (String) -> Unit,
+    onKeyboardDone: () -> Unit,
 ) {
     val mediumPadding = dimensionResource(R.dimen.padding_medium)
 
@@ -157,8 +163,8 @@ fun GameLayout(
                 style = typography.titleMedium
             )
             OutlinedTextField(
-                value = "",
-                singleLine = true,
+                value = userGuess, // sa valeur sera ce que luser ecrit
+                singleLine = true, // pr que le texte soit que sur une seule ligne
                 shape = shapes.large,
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.colors(
@@ -166,16 +172,16 @@ fun GameLayout(
                     unfocusedContainerColor = colorScheme.surface,
                     disabledContainerColor = colorScheme.surface,
                 ),
-                onValueChange = { },
-                label = { Text(stringResource(R.string.enter_your_word)) },
-                isError = false,
+                onValueChange = onUserGuessChanged,
+
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(
-                    onDone = { }
+                    onDone = { onKeyboardDone() }
+                ),
+
                 )
-            )
         }
     }
 }

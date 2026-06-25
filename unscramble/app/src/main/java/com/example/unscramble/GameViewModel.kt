@@ -1,5 +1,8 @@
 package com.example.unscramble
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.unscramble.data.allWords
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,6 +15,9 @@ class GameViewModel : ViewModel() {
 
     val uiState: StateFlow<GameUiState> = _uiState.asStateFlow() // propriété de support-> accessible et modifiable uniquement dans GameViewModel (??) /asStateFlow transforme le flux detat modifiable en en f.de en lecture seule
     private lateinit var currentWord: String // mot mtn/courant
+
+    var userGuess by mutableStateOf("")
+        private set // tout le monde peut lire userGuess, mais seule cette classe peut le modifier
 
     private var usedWords: MutableSet<String> = mutableSetOf() // les mots déjà utilisés
 
@@ -40,6 +46,11 @@ class GameViewModel : ViewModel() {
     fun resetGame() {
         usedWords.clear()
         _uiState.value = GameUiState(currentScrambledWord = pickRandomWordAndShuffle())
+    }
+
+    fun updateUserGuess(guessedWord: String){ // userGuess le mot deviné par luser, écrit et il va dans la variable guessedWord/  // met à jour userGuess avec le nouveau texte saisi et userGuess est la variable dans le ViewModel
+        userGuess = guessedWord
+
     }
 
     init {
