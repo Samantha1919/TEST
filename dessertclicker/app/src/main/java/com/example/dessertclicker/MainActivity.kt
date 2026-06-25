@@ -53,9 +53,7 @@ import androidx.core.content.ContextCompat
 import com.example.dessertclicker.data.Datasource
 import com.example.dessertclicker.model.Dessert
 import kotlin.collections.first
-import com.example.dessertclicker.R
 import com.example.dessertclicker.ui.theme.DessertClicker
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

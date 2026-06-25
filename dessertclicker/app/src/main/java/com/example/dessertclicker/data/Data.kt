@@ -1,6 +1,6 @@
 package com.example.dessertclicker.data
 
-import com.example.dessert_test.R
+import com.example.dessertclicker.R
 //import com.example.dessertclicker.R
 import com.example.dessertclicker.model.Dessert
 
