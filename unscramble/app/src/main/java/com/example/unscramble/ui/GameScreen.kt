@@ -40,7 +40,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.unscramble.GameViewModel
 import com.example.unscramble.R
 import com.example.unscramble.ui.theme.UnscrambleTheme
 
@@ -89,7 +88,7 @@ fun GameScreen(
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { gameViewModel.checkUserGuess() }
+                onClick = { gameViewModel.checkUserGuess() } // dcp ca marche avec ca mais il faudrait un autre
             ) {
                 Text(
                     text = stringResource(R.string.submit), // btn submit
@@ -98,7 +97,7 @@ fun GameScreen(
             }
 
             OutlinedButton(
-                onClick = { gameViewModel.skipWord() },
+                onClick = { gameViewModel.skipWord() }, // marche
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -109,6 +108,14 @@ fun GameScreen(
         }
 
         GameStatus(score = gameUiState.score, modifier = Modifier.padding(20.dp))
+
+        if (gameUiState.isGameOver) {
+            FinalScoreDialog(
+                score = gameUiState.score,
+                onPlayAgain = { gameViewModel.resetGame() }
+            )
+        }
+
     }
 }
 

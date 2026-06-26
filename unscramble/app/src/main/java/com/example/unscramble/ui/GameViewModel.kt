@@ -1,9 +1,10 @@
-package com.example.unscramble
+package com.example.unscramble.ui
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.unscramble.data.MAX_NO_OF_WORDS
 import com.example.unscramble.data.SCORE_INCREASE
 import com.example.unscramble.data.allWords
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,17 +49,18 @@ class GameViewModel : ViewModel() {
 
     fun resetGame() {
         usedWords.clear()
-        _uiState.value = GameUiState(currentScrambledWord = pickRandomWordAndShuffle())
+        _uiState.value = GameUiState(currentScrambledWord = pickRandomWordAndShuffle()) // on donne une valeur pr le nv mot mais pr rien dautre dcp tt se reintiliase aux variables de base
     }
 
+    // guessedWord cest le param ou cest ecrit le texte et userGuess cest la variable qui contient le texte dans le pram
     fun updateUserGuess(guessedWord: String) { // userGuess le mot deviné par luser, écrit et il va dans la variable guessedWord/  // met à jour userGuess avec le nouveau texte saisi et userGuess est la variable dans le ViewModel/// guessedWord est le texte que l'utilisateur vient de saisir
+
         userGuess =
             guessedWord         // On met à jour la variable userGuess avec cette nouvelle valeur
 
     }
 
     fun checkUserGuess() {
-
         if (userGuess.equals(currentWord, ignoreCase = true)) {
             val updatedScore = _uiState.value.score.plus(SCORE_INCREASE)
             updateGameState(updatedScore) // remplacer un chiffre dedans pr voir () ?
@@ -68,28 +70,43 @@ class GameViewModel : ViewModel() {
                 currentState.copy(isGuessedWordWrong = true)
             }
             // reinittialise/change la valeur/le mot dans variable user guess avec cette fonction
-            updateUserGuess("")
         }
+        updateUserGuess("")
+
     }
 
     private fun updateGameState(updatedScore: Int) { // met a jour le score, augmente le nb de mots choisi, et choisiti un nv mot dans le fichhier
-        _uiState.update { currentState ->
-            currentState.copy(
-                isGuessedWordWrong = false,
-                currentScrambledWord = pickRandomWordAndShuffle(),
-                score = updatedScore,
-                currentWordCount = currentState.currentWordCount.inc()
-            )
+        if (usedWords.size == MAX_NO_OF_WORDS) {
+            //Last round in the game, update isGameOver to true, don't pick a new word
+            _uiState.update { currentState ->
+                currentState.copy(
+                    isGuessedWordWrong = false,
+                    score = updatedScore,
+                    isGameOver = true
+                )
+            }
+        } else {
+            // Normal round in the game
+            _uiState.update { currentState ->
+                currentState.copy(
+                    isGuessedWordWrong = false,
+                    currentScrambledWord = pickRandomWordAndShuffle(),
+                    currentWordCount = currentState.currentWordCount.inc(),
+                    score = updatedScore
+                )
+            }
         }
+
     }
 
     fun skipWord() {
         updateGameState(_uiState.value.score)
         // Reset user guess
-        updateUserGuess("")
+        updateUserGuess("") // marche pas ?
     }
 
     init {
         resetGame()
     }
 }
+
