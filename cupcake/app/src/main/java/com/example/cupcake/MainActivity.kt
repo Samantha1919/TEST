@@ -5,19 +5,27 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.example.cupcake.ui.theme.CupcakeTheme
 
 class MainActivity : ComponentActivity() {
@@ -26,9 +34,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CupcakeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
+                    CupcakeTopBar()
+                }) { innerPadding ->
                     CupcakeApp(
-                        modifier = Modifier.padding(innerPadding) // si tu mets du .background(Color.Red) avant le padding tu verras que cxa met de lespace entre le texte et le cupcake
+                        modifier = Modifier.padding(innerPadding), // si tu mets du .background(Color.Red) avant le padding tu verras que cxa met de lespace entre le texte et le cupcake
+                        onClick = {}
                     )
                 }
             }
@@ -36,55 +47,80 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CupcakeApp(modifier: Modifier) {
-    CupcakeDisplay(modifier = modifier) // sinon il apllique pas le innerPadding et dit que le modifier est pas utilisé
+fun CupcakeTopBar() {
+
+    CenterAlignedTopAppBar(
+        title = {
+            Text("Cupcake")
+        }, colors = TopAppBarDefaults.mediumTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        )
+    )
 
 }
 
 @Composable
-fun CupcakeDisplay(modifier: Modifier = Modifier) {
+fun CupcakeApp(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-
-        ) {
-
-        Column(modifier = Modifier.weight(2f)) {
-
-        Image(
-            painter = painterResource(R.drawable.cupcake), contentDescription = null
-
-        )
-
-        Text(
-            text = "Order Cupcakes",
-            modifier = modifier,
-
-            )
-    }
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
 
         Column(
-            modifier = Modifier
-                .background(Color.Red)
-                .fillMaxSize()
-                .weight(1f),
-//            verticalArrangement = Arrangement.Bottom,
-//            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Button(onClick = {/*todo */ }) {
-                Text(text = "One cupcake")
-            }
-            Button(onClick = {/*todo */ }) {
-                Text(text = "Six Cupcakes")
-            }
+            Spacer(modifier = Modifier.height(16.dp))
 
-            Button(onClick = {/*todo */ }) {
-                Text(text = "Twelve Cupcakes")
-            }
+            Image(
+                painter = painterResource(R.drawable.cupcake),
+                contentDescription = null,
+                modifier = Modifier.width(300.dp)
+            )
+
+            Text(
+                text = "Order Cupcakes",
+                style = MaterialTheme.typography.headlineSmall
+            )
         }
 
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            SelectQuantityButton(onClick = onClick)
+        }
+    }
+}
+
+@Composable
+fun SelectQuantityButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier.widthIn(min = 250.dp)
+    ) {
+        Text(text = "One cupcake")
+    }
+    Button(
+        onClick = onClick,
+        modifier = modifier.widthIn(min = 250.dp)
+    ) {
+        Text(text = "Six cupcakes")
+    }
+    Button(
+        onClick = onClick,
+        modifier = modifier.widthIn(min = 250.dp)
+    ) {
+        Text(text = "Twelve cupcakes")
     }
 }
 
