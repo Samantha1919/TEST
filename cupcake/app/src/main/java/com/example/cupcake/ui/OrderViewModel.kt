@@ -35,7 +35,7 @@ class OrderViewModel : ViewModel() {
     fun setQuantity(numberCupcakes: Int) {
         _uiState.update { currentState ->
             currentState.copy(
-                quantity = numberCupcakes,
+                quantity = numberCupcakes, // nb de cupcakes
                 price = calculatePrice(quantity = numberCupcakes)
             )
         }
