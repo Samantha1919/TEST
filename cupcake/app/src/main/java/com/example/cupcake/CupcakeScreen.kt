@@ -2,6 +2,7 @@ package com.example.cupcake
 
 import android.content.Context
 import android.content.Intent
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -26,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.cupcake.data.DataSource
 import com.example.cupcake.ui.OrderSummaryScreen
@@ -33,11 +35,12 @@ import com.example.cupcake.ui.OrderViewModel
 import com.example.cupcake.ui.SelectOptionScreen
 import com.example.cupcake.ui.StartOrderScreen
 
-enum class CupcakeScreen() { // cest les routes et dcp les noms des diff étapes de navigation si g bien compris
-    Start,
-    Flavor,
-    Pickup,
-    Summary
+// psq les trucs de type StringRes cest de type Int
+enum class CupcakeScreen(@StringRes val title: Int) { // cest les routes et dcp les noms des diff étapes de navigation si g bien compris
+    Start(title = R.string.app_name),
+    Flavor(title = R.string.choose_flavor), // ca affiche le titre dans la bar en haut
+    Pickup(title = R.string.choose_pickup_date),
+    Summary(title = R.string.order_summary)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,10 +48,11 @@ enum class CupcakeScreen() { // cest les routes et dcp les noms des diff étapes
 fun CupcakeAppBar(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
+    currentScreen: CupcakeScreen,
     modifier: Modifier = Modifier
 ) {
     CenterAlignedTopAppBar(
-        title = { Text(stringResource(id = R.string.app_name)) },
+        title = { Text(stringResource(currentScreen.title)) },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
@@ -72,11 +76,16 @@ fun CupcakeApp(
     navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ) {
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentScreen = CupcakeScreen.valueOf(
+        backStackEntry?.destination?.route ?: CupcakeScreen.Start.name // recup le nom de lecran courant et si il y en a pas cest celui Start
+    )
     Scaffold(
         topBar = {
             CupcakeAppBar(
-                canNavigateBack = false,
-                navigateUp = { /* TODO: implement back navigation */ }
+                currentScreen = currentScreen,
+                canNavigateBack = navController.previousBackStackEntry != null,
+                navigateUp = { navController.navigateUp() }, // pr revenir a lecran precedent en appuyant sur licone de la fleche
             )
         }
     ) { innerPadding ->

@@ -21,8 +21,7 @@ private const val PRICE_FOR_SAME_DAY_PICKUP = 3.00
  * [OrderViewModel] holds information about a cupcake order in terms of quantity, flavor, and
  * pickup date. It also knows how to calculate the total price based on these order details.
  */
-class OrderViewModel : ViewModel() {
-
+class OrderViewModel : ViewModel() { // le nom de notre viewModel qui est de type ViewModel()
     /**
      * Cupcake state for this order
      */
