@@ -26,8 +26,8 @@ class OrderViewModel : ViewModel() {
     /**
      * Cupcake state for this order
      */
-    private val _uiState = MutableStateFlow(OrderUiState(pickupOptions = pickupOptions()))
-    val uiState: StateFlow<OrderUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(OrderUiState(pickupOptions = pickupOptions())) // le ViewModel peut le modifier
+    val uiState: StateFlow<OrderUiState> = _uiState.asStateFlow() // les Composable peuvent seulement lire
 
     /**
      * Set the quantity [numberCupcakes] of cupcakes for this order's state and update the price
