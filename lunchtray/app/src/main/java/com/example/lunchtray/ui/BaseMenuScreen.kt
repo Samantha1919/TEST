@@ -80,18 +80,18 @@ fun MenuItemRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
-            selected = selectedItemName == item.name,
+            selected = selectedItemName == item.name, // sert a regarder quel btn est selectionné
             onClick = onClick
         )
         Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
         ) {
             Text(
-                text = item.name,
+                text = item.name, // affiche le nom
                 style = MaterialTheme.typography.headlineSmall
             )
             Text(
-                text = item.description,
+                text = item.description, // affiche la description
                 style = MaterialTheme.typography.bodyLarge
             )
             Text(

@@ -42,7 +42,6 @@ fun LunchTrayBar(currentScreen: LunchTrayScreen) {
         title = {
             Text(stringResource(currentScreen.title)) // psq les titles sont dans strings.xml
         })
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,12 +82,13 @@ fun LunchTrayApp(
                 EntreeMenuScreen(
                     onCancelButtonClicked = {
                         navController.navigate(LunchTrayScreen.Start.name)
-
                     },
                     onNextButtonClicked = {
                         navController.navigate(LunchTrayScreen.SideDish.name)
                     },
-                    onSelectionChanged = {},
+                    onSelectionChanged = { entree -> // c un lambda
+                        viewModel.updateEntree(entree) // on peut ausis appeler ca item
+                    },
                 )
             }
 
@@ -97,14 +97,14 @@ fun LunchTrayApp(
                     options = DataSource.sideDishMenuItems,
                     onCancelButtonClicked = {
                         navController.navigate(LunchTrayScreen.Start.name)
-
                     },
                     onNextButtonClicked = {
                         navController.navigate(LunchTrayScreen.Accompaniment.name)
                     },
-                    onSelectionChanged = {},
+                    onSelectionChanged = { side ->
+                        viewModel.updateSideDish(side)
+                    },
                 )
-
             }
 
             composable(route = LunchTrayScreen.Accompaniment.name) {
@@ -112,12 +112,13 @@ fun LunchTrayApp(
                     options = DataSource.accompanimentMenuItems,
                     onCancelButtonClicked = {
                         navController.navigate(LunchTrayScreen.Start.name)
-
                     },
                     onNextButtonClicked = {
                         navController.navigate(LunchTrayScreen.Checkout.name)
                     },
-                    onSelectionChanged = {},
+                    onSelectionChanged = { accompaniment ->
+                        viewModel.updateAccompaniment(accompaniment)
+                    },
                 )
             }
 
@@ -126,14 +127,13 @@ fun LunchTrayApp(
                     orderUiState = uiState,
                     onCancelButtonClicked = {
                         navController.navigate(LunchTrayScreen.Start.name)
-
                     },
-                    onNextButtonClicked = {},
+                    onNextButtonClicked = {
+                        navController.navigate(LunchTrayScreen.Start.name)
+                    },
 
                     )
-
             }
-
         }
     }
 }
