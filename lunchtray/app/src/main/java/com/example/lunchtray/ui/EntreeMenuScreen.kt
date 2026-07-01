@@ -14,7 +14,7 @@ import com.example.lunchtray.model.MenuItem.EntreeItem
 
 @Composable
 fun EntreeMenuScreen(
-    options: List<EntreeItem>,
+    options: List<EntreeItem> = DataSource.entreeMenuItems, // g mis la valeur directement la
     onCancelButtonClicked: () -> Unit,
     onNextButtonClicked: () -> Unit,
     onSelectionChanged: (EntreeItem) -> Unit,
@@ -29,7 +29,7 @@ fun EntreeMenuScreen(
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun EntreeMenuPreview() {
     EntreeMenuScreen(

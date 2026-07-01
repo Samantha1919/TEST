@@ -18,7 +18,7 @@ import com.example.lunchtray.R
 
 @Composable
 fun StartOrderScreen(
-    onStartOrderButtonClicked: () -> Unit,
+    onStartOrderButtonClicked: () -> Unit, // fonction qui renvoie rien
     modifier: Modifier = Modifier
 ) {
     Column(

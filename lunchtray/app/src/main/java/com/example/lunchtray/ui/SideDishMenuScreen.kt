@@ -29,7 +29,7 @@ fun SideDishMenuScreen(
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun SideDishMenuPreview(){
     SideDishMenuScreen(
