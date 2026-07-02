@@ -150,7 +150,7 @@ private fun ReplyAppContent(
                     currentTab = replyUiState.currentMailbox,
                     onTabPressed = onTabPressed,
                     navigationItemContentList = navigationItemContentList,
-                    modifier = Modifier.testTag(navigationRailContentDescription)
+                    modifier = Modifier.testTag(navigationRailContentDescription) // nom de tag pr le test
                 )
             }
             Column(
@@ -187,7 +187,7 @@ private fun ReplyAppContent(
                         navigationItemContentList = navigationItemContentList,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .testTag(bottomNavigationContentDescription)
+                            .testTag(bottomNavigationContentDescription) // un tag de test pr differencier avec jsp ?
                     )
                 }
             }
