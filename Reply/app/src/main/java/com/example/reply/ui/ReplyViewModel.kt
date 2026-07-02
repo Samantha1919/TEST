@@ -29,7 +29,7 @@ class ReplyViewModel : ViewModel() {
     val uiState: StateFlow<ReplyUiState> = _uiState
 
     init {
-        initializeUIState()
+        initializeUIState() // les données entrent
     }
 
     private fun initializeUIState() {

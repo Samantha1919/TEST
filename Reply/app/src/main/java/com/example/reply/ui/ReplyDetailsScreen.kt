@@ -157,7 +157,7 @@ private fun ReplyEmailDetailsCard(
 }
 
 @Composable
-private fun DetailsScreenButtonBar(
+private fun DetailsScreenButtonBar( // les ptits mots dans les btn
     mailboxType: MailboxType,
     displayToast: (String) -> Unit,
     modifier: Modifier = Modifier

@@ -18,7 +18,7 @@ package com.example.reply.ui.utils
 /**
  * Different type of navigation supported by app depending on size and state.
  */
-enum class ReplyNavigationType {
+enum class ReplyNavigationType { // tiroir de  navigation/navigation drawer
     BOTTOM_NAVIGATION, NAVIGATION_RAIL, PERMANENT_NAVIGATION_DRAWER
 }
 
