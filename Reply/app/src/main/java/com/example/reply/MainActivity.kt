@@ -50,12 +50,33 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview(showBackground = true)
+
+@Preview(showBackground = true,)
 @Composable
 fun ReplyAppCompactPreview() {
     ReplyTheme {
         Surface {
-            ReplyApp(windowSize = WindowWidthSizeClass.Compact) // param pr la preview
+            ReplyApp(windowSize = WindowWidthSizeClass.Compact) // param pr definir la taille de la fenetre dans la preview
+        }
+    }
+}
+
+@Preview(showBackground = true, widthDp = 700)
+@Composable
+fun ReplyAppMediumPreview() {
+    ReplyTheme {
+        Surface {
+            ReplyApp(windowSize = WindowWidthSizeClass.Medium) // param pr definir la taille de la fenetre dans la preview
+        }
+    }
+}
+
+@Preview(showBackground = true, widthDp = 1000)
+@Composable
+fun ReplyAppExpandedPreview() {
+    ReplyTheme {
+        Surface {
+            ReplyApp(windowSize = WindowWidthSizeClass.Expanded)
         }
     }
 }
