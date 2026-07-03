@@ -3,7 +3,6 @@ package com.example.city.ui
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,16 +21,19 @@ enum class Routes {
 }
 
 @Composable
-fun TestScreen(modifier: Modifier = Modifier, navController: NavHostController) { // exemple de 2 facons diff de faire et la cest sans le next
+fun Bonjour(
+    modifier: Modifier = Modifier,
+    navController: NavHostController
+) { // exemple de 2 facons diff de faire et la cest sans le next
 
     Row() {
 
-        Button(
-            onClick = { navController.navigate(Routes.Aurevoir.name) },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
-        ) {
-            Text(text = "Bonjour")
-        }
+//        Button(
+//            onClick = { navController.navigate(Routes.Aurevoir.name) },
+//            colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
+//        ) {
+//            Text(text = "Bonjour")
+//        }
 
         Button(
             onClick = { navController.navigate(Routes.Aurevoir.name) },
@@ -50,18 +52,36 @@ fun TestScreen(modifier: Modifier = Modifier, navController: NavHostController) 
 }
 
 @Composable
-fun Action(next: () -> Unit = {}) {
-    Button(onClick = next) {
-        Text(text = "Aurevoir")
+fun Aurevoir(goToSalut: () -> Unit = {}, goToBonjour: () -> Unit = {}) {
+    Row() {
+//    Button(onClick = goToAurevoir) {
+//        Text(text = "Aurevoir")
+//    }
+        Button(onClick = goToSalut) {
+            Text(text = "Salut")
+        }
+        Button(onClick = goToBonjour) {
+            Text(text = "Bonjour")
+        }
     }
 }
 
 @Composable
 fun Salut(
-    next: () -> Unit = {}
+    goToBonjour: () -> Unit = {}, goToAurevoir: () -> Unit = {}
 ) {
-    Button(onClick = next) {
-        Text(text = "Salut")
+//    Button(onClick = next) {
+//        Text(text = "Salut")
+//    }
+
+    Row() {
+
+        Button(onClick = goToBonjour) {
+            Text(text = "Bonjour")
+        }
+        Button(onClick = goToAurevoir) {
+            Text(text = "Aurevoir")
+        }
     }
 }
 
@@ -74,15 +94,21 @@ fun Application(navController: NavHostController = rememberNavController()) {
     )
     {
         composable(route = Routes.Bonjour.name) { // dcp c lecran de debut de la nav
-            TestScreen(navController = navController)
+            Bonjour(navController = navController)
         }
 
         composable(route = Routes.Aurevoir.name) {
-            Action(next = { navController.navigate(Routes.Salut.name) })
+            Aurevoir(
+                goToSalut = { navController.navigate(Routes.Salut.name) },
+                goToBonjour = { navController.navigate(Routes.Bonjour.name) })
         }
 
         composable(route = Routes.Salut.name) {
-            Salut(next = { navController.navigate(Routes.Bonjour.name) })
+            Salut(goToBonjour = { navController.navigate(Routes.Bonjour.name) }, goToAurevoir = {
+                navController.navigate(
+                    Routes.Aurevoir.name
+                )
+            })
         }
 
     }
