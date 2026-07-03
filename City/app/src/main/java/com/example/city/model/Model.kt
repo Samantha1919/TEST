@@ -2,7 +2,6 @@ package com.example.city.model
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import java.sql.Types
 
 data class Recommendation(
     val id: Int,
