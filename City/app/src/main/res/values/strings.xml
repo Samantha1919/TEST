@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">City</string>
+    <string name="restaurant">Restaurant</string>
+    <string name="macdo">Macdonalds</string>
+    <string name="macdo_d">Mon fast-food préféré. Le meilleur est celui de Lancy Pont Rouge gare étoile!</string>
+    <string name="dominos">Dominos pizza</string>
+    <string name="dominos_d">Mon fast food préféré de pizza même si cest un peu cher</string>
+    <string name="arbys">Arbys</string>
+    <string name="arbys_d">La photo parle delle même</string>
+    <string name="tacos">Suprême Tacos</string>
+    <string name="tacos_d">Mon tacos préféré</string>
+    <string name="bk">Burger King</string>
+    <string name="bk_d">Propose de très bons accompagnements</string>
+    <string name="wasabi">Wasabi</string>
+    <string name="wasabi_d">Mon restaurant préféré de sushis</string>
+    <string name="park">Park</string>
+    <string name="bastions">Parc des bastions</string>
+    <string name="bastions_d">Parc où il y a la fête de la musique</string>
+    <string name="batie">Bois de la Bâtie</string>
+    <string name="batie_d">Très jolis animaux et familial</string>
+    <string name="grange">La Grange</string>
+    <string name="grange_d">Belle vue sur le lac</string>
+    <string name="bourgogne">Parc de Bourgogne</string>
+    <string name="bourgogne_d">Pateagoire très sympa</string>
+    <string name="anglais">Jardin Anglais</string>
+    <string name="anglais_d">Ni un jardin, ni un anglais</string>
+    <string name="cinema">Cinema</string>
+    <string name="blue">Blue Cinema</string>
+    <string name="blue_d">Mon cinéma préféré mais un peu cher</string>
+    <string name="pathe">Pathé Balexert</string>
+    <string name="pathe_d">TROP CHER</string>
+    <string name="arena">Arena Cinema</string>
+    <string name="arena_d">Alternative à Pathé</string>
+</resources>
