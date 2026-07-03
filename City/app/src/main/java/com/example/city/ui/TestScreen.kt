@@ -1,5 +1,6 @@
 package com.example.city.ui
 
+import android.R.attr.text
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
@@ -48,6 +49,10 @@ fun Bonjour(
         ) {
             Text(text = "Salut")
         }
+
+        Button(onClick = {}) {
+            Text(text = "chifrre")
+        }
     }
 }
 
@@ -82,8 +87,12 @@ fun Salut(
         Button(onClick = goToAurevoir) {
             Text(text = "Aurevoir")
         }
+
+
     }
 }
+
+
 
 @Composable
 fun Application(navController: NavHostController = rememberNavController()) {
