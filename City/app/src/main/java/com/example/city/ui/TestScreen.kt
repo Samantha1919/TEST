@@ -1,6 +1,4 @@
 package com.example.city.ui
-
-import android.R.attr.text
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
@@ -16,8 +14,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.city.Routes
 
-enum class Routes {
+enum class Routess {
     Bonjour, Aurevoir, Salut
 }
 
@@ -37,14 +36,14 @@ fun Bonjour(
 //        }
 
         Button(
-            onClick = { navController.navigate(Routes.Aurevoir.name) },
+            onClick = { navController.navigate(Routess.Aurevoir.name) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
         ) {
             Text(text = "Aurevoir")
         }
 
         Button(
-            onClick = { navController.navigate(Routes.Salut.name) },
+            onClick = { navController.navigate(Routess.Salut.name) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
         ) {
             Text(text = "Salut")
@@ -93,29 +92,28 @@ fun Salut(
 }
 
 
-
 @Composable
 fun Application(navController: NavHostController = rememberNavController()) {
     NavHost(
         // gere ce qui saffiche selon la route avec le param navController
         navController = navController, // controle la route ou tu te trouves actuellement
-        startDestination = Routes.Bonjour.name, // debut
+        startDestination = Routess.Bonjour.name, // debut
     )
     {
-        composable(route = Routes.Bonjour.name) { // dcp c lecran de debut de la nav
+        composable(route = Routess.Bonjour.name) { // dcp c lecran de debut de la nav
             Bonjour(navController = navController)
         }
 
-        composable(route = Routes.Aurevoir.name) {
+        composable(route = Routess.Aurevoir.name) {
             Aurevoir(
-                goToSalut = { navController.navigate(Routes.Salut.name) },
-                goToBonjour = { navController.navigate(Routes.Bonjour.name) })
+                goToSalut = { navController.navigate(Routess.Salut.name) },
+                goToBonjour = { navController.navigate(Routess.Bonjour.name) })
         }
 
-        composable(route = Routes.Salut.name) {
-            Salut(goToBonjour = { navController.navigate(Routes.Bonjour.name) }, goToAurevoir = {
+        composable(route = Routess.Salut.name) {
+            Salut(goToBonjour = { navController.navigate(Routess.Bonjour.name) }, goToAurevoir = {
                 navController.navigate(
-                    Routes.Aurevoir.name
+                    Routess.Aurevoir.name
                 )
             })
         }

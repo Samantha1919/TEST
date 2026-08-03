@@ -8,9 +8,10 @@ data class Recommendation(
     @StringRes val name: Int,
     @StringRes val description: Int,
     @DrawableRes val image: Int,
-    val type: Categories
+    val type: Category
 )
 
-enum class Categories {
+enum class Category {
     Restaurant, Park, Cinema
 }
+
