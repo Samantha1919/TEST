@@ -39,7 +39,6 @@ fun HomePage(
             )
         }
     }
-    // on a deja veirife si ct null avant mais ducoup c impossible quil soit null
 }
 
 @Composable
@@ -47,7 +46,6 @@ fun CategoryItem(
     categoryParam: Category,
     cityViewModel: CityViewModel,
     goToRecommendationList: () -> Unit,
-
     ) {
     TextButton(onClick = {
         onCategoryClick(
@@ -55,7 +53,7 @@ fun CategoryItem(
             cityViewModel,
             categoryParam,
         )
-    }) { // DisplayRecommendations(category = categoryParam )
+    }) {
         Text(text = categoryParam.toString())
     }
 }

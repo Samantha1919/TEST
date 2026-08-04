@@ -55,9 +55,6 @@ fun onRecommandationNameClick(
     goToRecommendationDetailed: () -> Unit,
     recommandationParam: Recommendation
 ) {
-
     cityViewModel.selectRecommendation(recommandationParam)
-
     goToRecommendationDetailed()
-
 }
