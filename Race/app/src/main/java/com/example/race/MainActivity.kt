@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             RaceTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    RaceTrackerApp()
+                    RaceTrackerApp(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
