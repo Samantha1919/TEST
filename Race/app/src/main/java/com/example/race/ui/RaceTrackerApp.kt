@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,17 +36,40 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.race.R
 import com.example.race.ui.theme.RaceTheme
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun RaceTrackerApp() {
 
     val playerOne = remember {
-        RaceParticipant(name = "Player 1", progressIncrement = 1)
+        RaceParticipant(name = "Player 1", progressIncrement = 2)
     }
     val playerTwo = remember {
-        RaceParticipant(name = "Player 2", progressIncrement = 2)
+        RaceParticipant(name = "Player 2", progressIncrement = 10) // il court de 10 en 10
     }
-    var raceInProgress by remember { mutableStateOf(false) }
+    var raceInProgress by remember { mutableStateOf(false) } // valeur est false
+
+    // si raceInProgress est true
+    if (raceInProgress) {
+        // relance ca seulement si la valeur des players change, les instances de playerOne ou playerTwo sont remplacées par des instances différentes, LaunchedEffect() doit annuler et relancer les coroutines sous-jacentes
+        LaunchedEffect(
+            playerOne,
+            playerTwo
+        ) {
+            coroutineScope {
+                launch { playerOne.run() }
+                launch { playerTwo.run() }
+            }
+            raceInProgress = false
+        }
+    }
+//    la valeur de raceInProgress au debut est a false
+//    Quand on appuie sur Start, raceInProgress vaut true,
+//    ce qui fait apparaître le LaunchedEffect et démarre les coroutines des joueurs.
+//    Quand on appuie sur Pause, raceInProgress devient false, le LaunchedEffect
+//    disparaît et Compose annule automatiquement les coroutines, donc les joueurs
+//    arrêtent de courir.
 
     RaceTrackerScreen(
         playerOne = playerOne,
