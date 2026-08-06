@@ -21,6 +21,6 @@ class MarsViewModel : ViewModel() {
      * [MarsPhoto] [List] [MutableList].
      */
     fun getMarsPhotos() {
-        marsUiState = "Set the Mars API status response here!"
+        marsUiState = "Set the Mars API status responsemettsts here!"
     }
 }

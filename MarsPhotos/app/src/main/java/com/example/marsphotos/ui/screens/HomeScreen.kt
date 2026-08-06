@@ -30,7 +30,7 @@ fun ResultScreen(photos: String, modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center,
         modifier = modifier
     ) {
-        Text(text = photos)
+        Text(text = photos) // affiche la valeur de marsUiState
     }
 }
 
